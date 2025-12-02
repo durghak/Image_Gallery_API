@@ -24,6 +24,7 @@ app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
 
 app.config["UPLOAD_FOLDER"] = os.path.join(os.getcwd(), "uploads")
+print(app.config["UPLOAD_FOLDER"]) 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 
