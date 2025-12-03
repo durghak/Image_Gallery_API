@@ -54,20 +54,20 @@ def upload_photo(folder_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# @photo_bp.route("/photo/get/<filename>", methods=["GET"])
-# def get_photo(filename):
-#     # Sanitize filename
-#     filename = secure_filename(filename.strip())
+@photo_bp.route("/photo/getFile/<filename>", methods=["GET"])
+def get_photo(filename):
+    # Sanitize filename
+    filename = secure_filename(filename.strip())
     
-#     # Get the absolute uploads folder
-#     uploads_dir = os.path.join(current_app.root_path, current_app.config.get('UPLOAD_FOLDER', 'uploads'))
+    # Get the absolute uploads folder
+    uploads_dir = os.path.join(current_app.root_path, current_app.config.get('UPLOAD_FOLDER', 'uploads'))
     
-#     file_path = os.path.join(uploads_dir, filename)
-#     if not os.path.exists(file_path):
-#         return jsonify({"error": "File not found"}), 404
+    file_path = os.path.join(uploads_dir, filename)
+    if not os.path.exists(file_path):
+        return jsonify({"error": "File not found"}), 404
 
-#     # Send the file, auto-detecting MIME type
-#     return send_from_directory(uploads_dir, filename, as_attachment=False)
+    # Send the file, auto-detecting MIME type
+    return send_from_directory(uploads_dir, filename, as_attachment=False)
 
 @photo_bp.route("/photo/get/<int:folder_id>", methods=["GET"])
 def get_photos(folder_id):      
@@ -82,8 +82,8 @@ def get_photos(folder_id):
 
   # your database connection
 
-@photo_bp.route("/photo/delete/<filename>", methods=["DELETE"])
-def delete_photo(filename):
+@photo_bp.route("/photo/delete/<int:folder_id>/<filename>", methods=["DELETE"])
+def delete_photo(folder_id, filename):
     # Sanitize the filename
     filename = secure_filename(filename.strip())
     
@@ -100,7 +100,7 @@ def delete_photo(filename):
 
     # Delete record from database
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM photo WHERE image_path=%s", (f"uploads/{filename}",))
+    cursor.execute("DELETE FROM photo WHERE image_path=%s and folder_id=%s", (f"uploads/{filename}", folder_id))
     conn.commit()
     cursor.close()
 
