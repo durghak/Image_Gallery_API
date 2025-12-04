@@ -58,3 +58,10 @@ def login():
     session['user_id'] = str(user_id)  # This automatically triggers flask cookie
 
     return jsonify({"detail": "User login successful","user_id":user_id}), 200
+
+
+@user_bp.route("/logout", methods=['POST'])
+def logout():
+    session.pop('user_id', None)
+    return jsonify({"detail": "User logged out successfully"}), 200
+   
